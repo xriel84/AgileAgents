@@ -1,0 +1,18 @@
+<!doctype html>
+<!-- FIXTURE: iso-billboard (img half) — must FAIL the gate
+     Rule: every img inside an .iso-plane must carry counter-rotate.
+     This fixture has an img inside .iso-plane with NO counter-rotate transform. -->
+<html>
+  <body>
+    <div
+      class="iso-plane"
+      style="
+        transform: rotateX(60deg) rotateZ(45deg);
+        transform-style: preserve-3d;
+      "
+    >
+      <!-- VIOLATION: img has no counter-rotate — gate must reject this -->
+      <img src="test.png" style="transform: none" alt="no-counter-rotate" />
+    </div>
+  </body>
+</html>

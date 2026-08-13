@@ -1,0 +1,52 @@
+/* deck/modules/iso.css — isometric plane + counter-rotate rules
+ * Source: AL-v8.html .iso-floor (L497-503), .room-panel img (L565-573)
+ * Rule: raster children (img, video) carry EXACT INVERSE in REVERSED ORDER.
+ *       svg / line-art children carry NO counter-rotate.
+ */
+@import "./tokens.css";
+
+/* Base isometric plane */
+.iso-plane {
+  transform: rotateX(var(--iso-x)) rotateZ(var(--iso-z));
+  transform-style: preserve-3d;
+}
+
+/* Raster children — stand upright against the iso transform
+ * Reversed order: rotateZ first, then rotateX (inverse of the plane's Z then X) */
+.iso-plane img,
+.iso-plane video {
+  transform: rotateZ(calc(-1 * var(--iso-z))) rotateX(calc(-1 * var(--iso-x)));
+}
+
+/* SVG / line-art children — live genuinely on-angle, no counter-rotate */
+.iso-plane svg {
+  /* intentionally empty — do not add transform */
+}
+
+/* Convenience: floor surface sizing baseline */
+.iso-floor {
+  position: relative;
+  transform-style: preserve-3d;
+  flex-shrink: 0;
+}
+
+/* Upright panel anchor — positions the sprite's origin at a cell center */
+.iso-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/* Panel image: anchored at bottom edge, counter-rotated upright */
+.iso-panel img {
+  position: absolute;
+  bottom: 0;
+  transform-origin: 50% 100%;
+  transform: translate(-50%, 0) rotateZ(calc(-1 * var(--iso-z)))
+    rotateX(calc(-1 * var(--iso-x)));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}

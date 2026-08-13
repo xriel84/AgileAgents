@@ -1,0 +1,82 @@
+/* deck/modules/tokens.css — AL/mfa palette lineage, lowercase hex only
+ * Canonical source: mfa-building.html :root (L20-47) + AL-v8.html :root (L9-31)
+ * Theatre lineage (uppercase hex) is excluded.
+ */
+:root {
+  /* Core palette */
+  --gold: #c9a84c;
+  --black: #0a0a0a;
+  --cream: #f5e6c8;
+  --red: #c54545;
+  --blue: #4577a5;
+  --yellow: #c9a84c;
+  --green: #45a555;
+  --dark-gray: #1a1a1a;
+  --medium-gray: #2d2d2d;
+
+  /* Sky gradient */
+  --sky-top: #050508;
+  --sky-mid: #0c101a;
+  --sky-bot: #141e2a;
+
+  /* Gold alpha variants */
+  --gold-dim: rgba(201, 168, 76, 0.3);
+  --gold-glow: rgba(201, 168, 76, 0.15);
+
+  /* Floor tints — per 3D building theme */
+  --f4-dark: #1a1812;
+  --f4-mid: #26221a;
+  --f4-roof: #302c22;
+  --f4-accent: #c9a84c;
+  --f4-glow: rgba(201, 168, 76, 0.3);
+  --f4-window: rgba(201, 168, 76, 0.2);
+
+  --f3-dark: #121a14;
+  --f3-mid: #1a2618;
+  --f3-roof: #223022;
+  --f3-accent: #45a555;
+  --f3-glow: rgba(69, 165, 85, 0.3);
+  --f3-window: rgba(69, 165, 85, 0.2);
+
+  --f2-dark: #121418;
+  --f2-mid: #1a2028;
+  --f2-roof: #222a34;
+  --f2-accent: #4577a5;
+  --f2-glow: rgba(69, 119, 165, 0.3);
+  --f2-window: rgba(69, 119, 165, 0.2);
+
+  --f1-dark: #1a1214;
+  --f1-mid: #241a1e;
+  --f1-roof: #2e2226;
+  --f1-accent: #c54545;
+  --f1-glow: rgba(197, 69, 69, 0.3);
+  --f1-window: rgba(197, 69, 69, 0.2);
+
+  /* Isometric angles */
+  --iso-x: 60deg;
+  --iso-z: 45deg;
+
+  /* Typography */
+  --font-display: "Poiret One", cursive;
+  --font-body: "Josefin Sans", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* UI chrome */
+  --ui-text: #f5e6c8;
+  --ui-text-dim: #6a5e50;
+  --ui-border: #2a2018;
+
+  /* Perspective */
+  --wide-perspective: 900px;
+
+  /* Transition */
+  --transition: 600ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Asset placeholder — unbound slots */
+  --placeholder-bg: #1a1a1a;
+  --placeholder-border: rgba(201, 168, 76, 0.2);
+  --placeholder-text: rgba(201, 168, 76, 0.3);
+  --placeholder-failed-bg: rgba(197, 69, 69, 0.08);
+  --placeholder-failed-border: rgba(197, 69, 69, 0.4);
+  --placeholder-failed-text: rgba(197, 69, 69, 0.6);
+}

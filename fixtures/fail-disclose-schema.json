@@ -1,0 +1,9 @@
+[
+  {
+    "paragraph": "This node is missing the required sentence field.",
+    "deep": { "specs": ["spec one"], "cited": [] }
+  },
+  {
+    "sentence": "This node is missing the required paragraph field."
+  }
+]

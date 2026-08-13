@@ -1,0 +1,4 @@
+{"key":"floor","plane":"floor","description":"Horizontal isometric surface; raster children counter-rotate"}
+{"key":"wall","plane":"wall","description":"Vertical surface attached to floor edge"}
+{"key":"panel","plane":"panel","description":"Upright sprite panel anchored at cell center"}
+{"key":"brain-quadrant","plane":"brain-quadrant","description":"Quadrant tile in brain diamond overlay"}

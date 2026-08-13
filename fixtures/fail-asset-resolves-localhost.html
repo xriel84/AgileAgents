@@ -1,0 +1,16 @@
+<!doctype html>
+<!-- FIXTURE: asset-resolves (localhost) — must FAIL the gate
+     Rule: no URL under deck/ may contain 127.0.0.1 or localhost. -->
+<html>
+  <body>
+    <!-- VIOLATION: hardcoded localhost ComfyUI URL -->
+    <img
+      src="http://127.0.0.1:8188/view?filename=test.webp&type=output"
+      alt="bad"
+    />
+    <img
+      src="http://localhost:8188/view?filename=other.png&type=output"
+      alt="also-bad"
+    />
+  </body>
+</html>

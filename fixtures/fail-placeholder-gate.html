@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- fail-placeholder-gate.html — RED fixture for placeholder-gate check.
+     Demonstrates the masking failure: a bound img's onerror handler applies
+     the .asset-placeholder class (the unbound-slot class), hiding the fact
+     that a real binding exists but failed to load.
+     A passing system must keep .asset-placeholder ONLY for unbound slots and
+     use .asset-load-failed for bound-but-failed. This file violates that rule. -->
+<html>
+  <body>
+    <!-- Bound img: data-bound-key proves a key IS present.
+         The onerror replaces with asset-placeholder — this masks the failure.
+         A viewer sees an "unbound slot" placeholder when the real problem
+         is a 404 on a key that IS registered in the manifest. -->
+    <img
+      class="office-portrait"
+      src="al_aribot_M-C_still_00001.png"
+      data-bound-key="al_aribot_M-C_still_00001.png"
+      alt=""
+      onerror="
+        var div = document.createElement('div');
+        div.className = 'asset-placeholder';
+        div.textContent = 'portrait';
+        this.parentNode.replaceChild(div, this);
+      "
+    />
+  </body>
+</html>

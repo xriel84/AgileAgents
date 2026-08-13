@@ -1,0 +1,641 @@
+[
+  {
+    "id": "floor_system",
+    "depth": "floor",
+    "agent": "_system",
+    "kind": "hub",
+    "label": "[P001]",
+    "disclosure": {
+      "sentence": "[COPY-001]",
+      "paragraph": "[COPY-002]",
+      "deep": {
+        "specs": [
+          "[COPY-003]",
+          "[COPY-004]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [
+      "office_aribot",
+      "office_anabot",
+      "office_edbot",
+      "office_artbot",
+      "timeline_step_01",
+      "timeline_step_02",
+      "timeline_step_03",
+      "timeline_step_04",
+      "timeline_step_05",
+      "timeline_step_06"
+    ],
+    "assets": {}
+  },
+  {
+    "id": "office_aribot",
+    "depth": "office",
+    "agent": "aribot",
+    "kind": "agent",
+    "label": "AriBot",
+    "disclosure": {
+      "sentence": "[COPY-005]",
+      "paragraph": "[COPY-006]",
+      "deep": {
+        "specs": [
+          "[COPY-007]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [
+      "desk_aribot_orchestrate",
+      "desk_aribot_discord",
+      "desk_aribot_world_state",
+      "brain_aribot_model",
+      "brain_aribot_tools",
+      "brain_aribot_memory",
+      "brain_aribot_loop"
+    ],
+    "assets": {
+      "still": {
+        "key": "al_aribot_M-C_still_00001.png",
+        "sha256": "b770a05708921b6e8bb1365b84f76367b94a060ce5709fe10b302e727374cb57"
+      },
+      "idle": {
+        "key": "al_aribot_M-C_idle_00001.webp",
+        "sha256": "3f9a5622bba65c661c06b00fd01294bafdb468c39e2a586cb076dac60a77d707"
+      },
+      "disassemble": {
+        "key": "al_aribot_C-C_disassemble_00001.webp",
+        "sha256": "9a67fc3ffdae11213a87b4de1cd7787d0d6f5c3df72f4d9d64eda9f457cfda28"
+      }
+    }
+  },
+  {
+    "id": "office_anabot",
+    "depth": "office",
+    "agent": "anabot",
+    "kind": "agent",
+    "label": "AnaBot",
+    "disclosure": {
+      "sentence": "[COPY-008]",
+      "paragraph": "[COPY-009]",
+      "deep": {
+        "specs": [
+          "[COPY-010]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [
+      "desk_anabot_assignments",
+      "desk_anabot_questions",
+      "desk_anabot_grading",
+      "brain_anabot_model",
+      "brain_anabot_tools",
+      "brain_anabot_memory",
+      "brain_anabot_loop"
+    ],
+    "assets": {
+      "still": {
+        "key": "al_anabot_M-C_still_00001.png",
+        "sha256": "770713b4ff4dc5606402c6f94d99ca53e28f49e57c18d99b85acedb4f7632e68"
+      },
+      "idle": {
+        "key": "al_anabot_M-C_idle_00001.webp",
+        "sha256": "ae3aa436b615de5bb56f452ad4622fda65f58b9df90e33577a4c9e184c48afc7"
+      },
+      "disassemble": {
+        "key": "al_anabot_C-C_disassemble_00001.webp",
+        "sha256": "f8bfb959c13e869973ac1e36b837a9115f0af9c78a550f889fe2c406c1042730"
+      }
+    }
+  },
+  {
+    "id": "office_edbot",
+    "depth": "office",
+    "agent": "edbot",
+    "kind": "agent",
+    "label": "EdBot",
+    "disclosure": {
+      "sentence": "[COPY-011]",
+      "paragraph": "[COPY-012]",
+      "deep": {
+        "specs": [
+          "[COPY-013]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [
+      "desk_edbot_obs",
+      "desk_edbot_routing",
+      "desk_edbot_xr",
+      "brain_edbot_model",
+      "brain_edbot_tools",
+      "brain_edbot_memory",
+      "brain_edbot_loop"
+    ],
+    "assets": {
+      "still": {
+        "key": "al_edbot_M-C_still_00001.png",
+        "sha256": "17b6cba60fbea73c133f5adb964461abb635ed48d41ea58ccee220f357ee2c17"
+      },
+      "idle": {
+        "key": "al_edbot_C-C_idle_00001.webp",
+        "sha256": "117148c91d8bce5ab5d318db8a2c85a76d7b79bfb571498f10eee1a276120af6"
+      },
+      "disassemble": {
+        "key": "al_edbot_C-C_disassemble_00001.webp",
+        "sha256": "1dcee6ad0c3b29d4aa9f90b61d2edacb1203a8470ef2599bdfed821dbf9f0714"
+      }
+    }
+  },
+  {
+    "id": "office_artbot",
+    "depth": "office",
+    "agent": "artbot",
+    "kind": "agent",
+    "label": "ArtBot",
+    "disclosure": {
+      "sentence": "[COPY-014]",
+      "paragraph": "[COPY-015]",
+      "deep": {
+        "specs": [
+          "[COPY-016]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [
+      "desk_artbot_asset_gen",
+      "desk_artbot_module_build",
+      "desk_artbot_deploy",
+      "brain_artbot_model",
+      "brain_artbot_tools",
+      "brain_artbot_memory",
+      "brain_artbot_loop"
+    ],
+    "assets": {
+      "still": {
+        "key": "al_artbot_M-C_still_00001.png",
+        "sha256": "b5174b35e810fe5cbbcf1504d95a4ce6525c46ade7e160554a284a8da9f45f50"
+      },
+      "idle": {
+        "key": "al_artbot_M-C_idle_00001.webp",
+        "sha256": "2d669ae37a4df78173a76855581f5fe589718668095692d673000b40aa9d32af"
+      },
+      "disassemble": {
+        "key": "al_artbot_C-C_disassemble_00001.webp",
+        "sha256": "aa48a1403a295466a7fc17ebd09bf7bdac7360b5f3a8370de1776587e37278b3"
+      }
+    }
+  },
+  {
+    "id": "desk_aribot_orchestrate",
+    "depth": "desk",
+    "agent": "aribot",
+    "kind": "capability",
+    "label": "[P017]",
+    "disclosure": {
+      "sentence": "[COPY-017]",
+      "paragraph": "[COPY-018]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_aribot_discord",
+    "depth": "desk",
+    "agent": "aribot",
+    "kind": "capability",
+    "label": "[P018]",
+    "disclosure": {
+      "sentence": "[COPY-019]",
+      "paragraph": "[COPY-020]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_aribot_world_state",
+    "depth": "desk",
+    "agent": "aribot",
+    "kind": "capability",
+    "label": "[P019]",
+    "disclosure": {
+      "sentence": "[COPY-021]",
+      "paragraph": "[COPY-022]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_anabot_assignments",
+    "depth": "desk",
+    "agent": "anabot",
+    "kind": "capability",
+    "label": "[P020]",
+    "disclosure": {
+      "sentence": "[COPY-023]",
+      "paragraph": "[COPY-024]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_anabot_questions",
+    "depth": "desk",
+    "agent": "anabot",
+    "kind": "capability",
+    "label": "[P021]",
+    "disclosure": {
+      "sentence": "[COPY-025]",
+      "paragraph": "[COPY-026]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_anabot_grading",
+    "depth": "desk",
+    "agent": "anabot",
+    "kind": "capability",
+    "label": "[P022]",
+    "disclosure": {
+      "sentence": "[COPY-027]",
+      "paragraph": "[COPY-028]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_edbot_obs",
+    "depth": "desk",
+    "agent": "edbot",
+    "kind": "capability",
+    "label": "[P023]",
+    "disclosure": {
+      "sentence": "[COPY-029]",
+      "paragraph": "[COPY-030]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_edbot_routing",
+    "depth": "desk",
+    "agent": "edbot",
+    "kind": "capability",
+    "label": "[P024]",
+    "disclosure": {
+      "sentence": "[COPY-031]",
+      "paragraph": "[COPY-032]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_edbot_xr",
+    "depth": "desk",
+    "agent": "edbot",
+    "kind": "capability",
+    "label": "[P025]",
+    "disclosure": {
+      "sentence": "[COPY-033]",
+      "paragraph": "[COPY-034]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_artbot_asset_gen",
+    "depth": "desk",
+    "agent": "artbot",
+    "kind": "capability",
+    "label": "[P026]",
+    "disclosure": {
+      "sentence": "[COPY-035]",
+      "paragraph": "[COPY-036]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_artbot_module_build",
+    "depth": "desk",
+    "agent": "artbot",
+    "kind": "capability",
+    "label": "[P027]",
+    "disclosure": {
+      "sentence": "[COPY-037]",
+      "paragraph": "[COPY-038]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "desk_artbot_deploy",
+    "depth": "desk",
+    "agent": "artbot",
+    "kind": "capability",
+    "label": "[P028]",
+    "disclosure": {
+      "sentence": "[COPY-039]",
+      "paragraph": "[COPY-040]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_aribot_model",
+    "depth": "brain",
+    "agent": "aribot",
+    "kind": "substrate",
+    "label": "[P029]",
+    "disclosure": {
+      "sentence": "[COPY-041]",
+      "paragraph": "[COPY-042]",
+      "deep": {
+        "specs": [
+          "[COPY-043]"
+        ],
+        "cited": []
+      }
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_aribot_tools",
+    "depth": "brain",
+    "agent": "aribot",
+    "kind": "substrate",
+    "label": "[P030]",
+    "disclosure": {
+      "sentence": "[COPY-044]",
+      "paragraph": "[COPY-045]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_aribot_memory",
+    "depth": "brain",
+    "agent": "aribot",
+    "kind": "substrate",
+    "label": "[P031]",
+    "disclosure": {
+      "sentence": "[COPY-046]",
+      "paragraph": "[COPY-047]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_aribot_loop",
+    "depth": "brain",
+    "agent": "aribot",
+    "kind": "substrate",
+    "label": "[P032]",
+    "disclosure": {
+      "sentence": "[COPY-048]",
+      "paragraph": "[COPY-049]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_anabot_model",
+    "depth": "brain",
+    "agent": "anabot",
+    "kind": "substrate",
+    "label": "[P033]",
+    "disclosure": {
+      "sentence": "[COPY-050]",
+      "paragraph": "[COPY-051]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_anabot_tools",
+    "depth": "brain",
+    "agent": "anabot",
+    "kind": "substrate",
+    "label": "[P034]",
+    "disclosure": {
+      "sentence": "[COPY-052]",
+      "paragraph": "[COPY-053]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_anabot_memory",
+    "depth": "brain",
+    "agent": "anabot",
+    "kind": "substrate",
+    "label": "[P035]",
+    "disclosure": {
+      "sentence": "[COPY-054]",
+      "paragraph": "[COPY-055]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_anabot_loop",
+    "depth": "brain",
+    "agent": "anabot",
+    "kind": "substrate",
+    "label": "[P036]",
+    "disclosure": {
+      "sentence": "[COPY-056]",
+      "paragraph": "[COPY-057]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_edbot_model",
+    "depth": "brain",
+    "agent": "edbot",
+    "kind": "substrate",
+    "label": "[P037]",
+    "disclosure": {
+      "sentence": "[COPY-058]",
+      "paragraph": "[COPY-059]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_edbot_tools",
+    "depth": "brain",
+    "agent": "edbot",
+    "kind": "substrate",
+    "label": "[P038]",
+    "disclosure": {
+      "sentence": "[COPY-060]",
+      "paragraph": "[COPY-061]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_edbot_memory",
+    "depth": "brain",
+    "agent": "edbot",
+    "kind": "substrate",
+    "label": "[P039]",
+    "disclosure": {
+      "sentence": "[COPY-062]",
+      "paragraph": "[COPY-063]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_edbot_loop",
+    "depth": "brain",
+    "agent": "edbot",
+    "kind": "substrate",
+    "label": "[P040]",
+    "disclosure": {
+      "sentence": "[COPY-064]",
+      "paragraph": "[COPY-065]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_artbot_model",
+    "depth": "brain",
+    "agent": "artbot",
+    "kind": "substrate",
+    "label": "[P041]",
+    "disclosure": {
+      "sentence": "[COPY-066]",
+      "paragraph": "[COPY-067]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_artbot_tools",
+    "depth": "brain",
+    "agent": "artbot",
+    "kind": "substrate",
+    "label": "[P042]",
+    "disclosure": {
+      "sentence": "[COPY-068]",
+      "paragraph": "[COPY-069]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_artbot_memory",
+    "depth": "brain",
+    "agent": "artbot",
+    "kind": "substrate",
+    "label": "[P043]",
+    "disclosure": {
+      "sentence": "[COPY-070]",
+      "paragraph": "[COPY-071]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "brain_artbot_loop",
+    "depth": "brain",
+    "agent": "artbot",
+    "kind": "substrate",
+    "label": "[P044]",
+    "disclosure": {
+      "sentence": "[COPY-072]",
+      "paragraph": "[COPY-073]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_01",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P045]",
+    "disclosure": {
+      "sentence": "[COPY-074]",
+      "paragraph": "[COPY-075]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_02",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P046]",
+    "disclosure": {
+      "sentence": "[COPY-076]",
+      "paragraph": "[COPY-077]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_03",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P047]",
+    "disclosure": {
+      "sentence": "[COPY-078]",
+      "paragraph": "[COPY-079]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_04",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P048]",
+    "disclosure": {
+      "sentence": "[COPY-080]",
+      "paragraph": "[COPY-081]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_05",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P049]",
+    "disclosure": {
+      "sentence": "[COPY-082]",
+      "paragraph": "[COPY-083]"
+    },
+    "children": [],
+    "assets": {}
+  },
+  {
+    "id": "timeline_step_06",
+    "depth": "timeline",
+    "agent": "_system",
+    "kind": "event",
+    "label": "[P050]",
+    "disclosure": {
+      "sentence": "[COPY-084]",
+      "paragraph": "[COPY-085]"
+    },
+    "children": [],
+    "assets": {}
+  }
+]

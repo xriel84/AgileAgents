@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- FIXTURE: iso-billboard (svg half) — must FAIL the gate
+     Rule: svg inside an .iso-plane must NOT carry a counter-rotate.
+     This fixture has an svg inside .iso-plane WITH a counter-rotate. -->
+<html>
+  <body>
+    <div
+      class="iso-plane"
+      style="
+        transform: rotateX(60deg) rotateZ(45deg);
+        transform-style: preserve-3d;
+      "
+    >
+      <!-- VIOLATION: svg has counter-rotate — gate must reject this -->
+      <svg
+        width="100"
+        height="100"
+        style="transform: rotateZ(-45deg) rotateX(-60deg)"
+      ></svg>
+    </div>
+  </body>
+</html>

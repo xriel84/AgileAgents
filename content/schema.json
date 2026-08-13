@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "deck-content-schema",
+  "description": "Schema for deck/content/nodes.json — content spec for the deck page.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "depth", "agent", "kind", "label", "children", "assets"],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]+$",
+        "description": "Stable slug — never renamed after publish."
+      },
+      "depth": {
+        "type": "string",
+        "enum": ["floor", "office", "desk", "brain", "timeline"],
+        "description": "Nav depth where this node lives."
+      },
+      "agent": {
+        "type": "string",
+        "enum": ["aribot", "anabot", "edbot", "artbot", "_system"],
+        "description": "Owning agent; _system for cross-agent or floor-level nodes."
+      },
+      "kind": {
+        "type": "string",
+        "enum": ["hub", "agent", "capability", "substrate", "event"],
+        "description": "What kind of thing this node represents."
+      },
+      "label": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Display label. [PNNN] for unwritten copy; NEVER hardcode in deck/modules/."
+      },
+      "disclosure": {
+        "type": "object",
+        "required": ["sentence", "paragraph"],
+        "additionalProperties": false,
+        "properties": {
+          "sentence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "paragraph": {
+            "type": "string",
+            "minLength": 1
+          },
+          "deep": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "specs": { "type": "array", "items": { "type": "string" } },
+              "cited": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "children": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Ordered list of child node ids."
+      },
+      "assets": {
+        "type": "object",
+        "description": "Asset bindings by slot name. Each value references assets/index.jsonl by key.",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["key"],
+          "additionalProperties": false,
+          "properties": {
+            "key": { "type": "string" },
+            "sha256": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

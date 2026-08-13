@@ -1,0 +1,7 @@
+/* FIXTURE: tokens-only — must FAIL the gate
+   Rule: no raw hex literal in module CSS outside the token set.
+   This file uses a hardcoded hex color that is not a token reference. */
+.bad-component {
+  color: #ff0000; /* VIOLATION: raw hex, not var(--...) */
+  background: #123456; /* VIOLATION: raw hex, not in token set */
+}

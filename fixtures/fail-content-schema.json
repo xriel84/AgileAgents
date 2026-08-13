@@ -1,0 +1,10 @@
+[
+  {
+    "id": "bad_node_missing_required",
+    "depth": "office",
+    "agent": "aribot",
+    "kind": "agent",
+    "children": [],
+    "assets": {}
+  }
+]

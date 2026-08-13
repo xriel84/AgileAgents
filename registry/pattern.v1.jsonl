@@ -1,0 +1,6 @@
+{"key":"drill-zoom","kind":"drill-zoom","module":"depth-nav.js","description":"Scale-out zoom into next depth layer"}
+{"key":"quadrant-expand","kind":"quadrant-expand","module":"brain.js","description":"Quadrant icons fly from center to diamond positions"}
+{"key":"brain-reveal","kind":"brain-reveal","module":"brain.js","description":"Portrait gate → disassemble animation → quadrant grid"}
+{"key":"office-anim","kind":"office-anim","module":"depth-nav.js","description":"Scenic flat entrance — walls wing in, props fly from depth"}
+{"key":"schematic-overlay","kind":"schematic-overlay","module":"brain.js","description":"Full-screen schematic opened from quadrant click"}
+{"key":"timeline-beat","kind":"timeline-beat","module":"timeline.js","description":"Animated beat dot pulsing at a pipeline node"}

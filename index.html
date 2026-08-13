@@ -1,0 +1,1147 @@
+<!doctype html>
+<!-- raptor-deck-build:2026-08-12 -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[P001]</title>
+    <link rel="stylesheet" href="modules/tokens.css" />
+    <link rel="stylesheet" href="modules/iso.css" />
+    <style>
+      /* ── Layout ──────────────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--color-bg, #0a0a0f);
+        color: var(--color-text, #e8e4d8);
+        font-family: var(--font-body, "Josefin Sans", sans-serif);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .depth-layer {
+        position: fixed;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .depth-layer.active {
+        display: flex;
+      }
+
+      /* ── Header / breadcrumb ─────────────────────────────────── */
+      #deck-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 48px;
+        background: rgba(10, 10, 15, 0.9);
+        border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 12px;
+        z-index: 100;
+      }
+      #back-btn {
+        background: none;
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        color: #c9a84c;
+        padding: 4px 12px;
+        cursor: pointer;
+        font-size: 14px;
+        display: none;
+      }
+      #back-btn:hover {
+        background: rgba(201, 168, 76, 0.1);
+      }
+      #breadcrumb {
+        font-size: 13px;
+        color: rgba(232, 228, 216, 0.6);
+        letter-spacing: 0.08em;
+      }
+
+      /* ── Main content (below header) ─────────────────────────── */
+      .depth-content {
+        margin-top: 48px;
+        padding: 32px 24px;
+        flex: 1;
+      }
+
+      /* ── Floor: agent grid ───────────────────────────────────── */
+      .agent-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .agent-card {
+        border: 1px solid rgba(201, 168, 76, 0.3);
+        background: rgba(201, 168, 76, 0.04);
+        padding: 24px 20px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        position: relative;
+      }
+      .agent-card:hover {
+        border-color: rgba(201, 168, 76, 0.7);
+        background: rgba(201, 168, 76, 0.08);
+      }
+      .agent-card__label {
+        font-size: 20px;
+        font-weight: 600;
+        color: #c9a84c;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+      }
+      .agent-card__role {
+        font-size: 12px;
+        color: rgba(232, 228, 216, 0.5);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .agent-card__arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(201, 168, 76, 0.5);
+        font-size: 18px;
+        transition:
+          color 0.2s,
+          right 0.2s;
+      }
+      .agent-card:hover .agent-card__arrow {
+        color: #c9a84c;
+        right: 12px;
+      }
+
+      /* Timeline entry card */
+      .timeline-entry {
+        grid-column: 1 / -1;
+        border: 1px solid rgba(201, 168, 76, 0.15);
+        background: rgba(201, 168, 76, 0.02);
+        padding: 16px 20px;
+        cursor: pointer;
+        text-align: center;
+        transition: border-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      .timeline-entry:hover {
+        border-color: rgba(201, 168, 76, 0.4);
+      }
+      .timeline-entry__label {
+        font-size: 14px;
+        color: rgba(232, 228, 216, 0.5);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      /* ── Office: agent view ──────────────────────────────────── */
+      .office-header {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 32px;
+        align-items: flex-start;
+      }
+      .office-portrait {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        flex-shrink: 0;
+        background: rgba(201, 168, 76, 0.05);
+      }
+      .office-portrait-placeholder {
+        width: 120px;
+        height: 120px;
+        background: rgba(201, 168, 76, 0.08);
+        border: 1px solid rgba(201, 168, 76, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(201, 168, 76, 0.3);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .office-meta {
+        flex: 1;
+      }
+      .office-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: #c9a84c;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+      }
+      .office-sentence {
+        font-size: 15px;
+        color: rgba(232, 228, 216, 0.7);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .office-actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .btn-ghost {
+        background: none;
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        color: #c9a84c;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        transition: background 0.2s;
+      }
+      .btn-ghost:hover {
+        background: rgba(201, 168, 76, 0.1);
+      }
+
+      /* ── Desk list ───────────────────────────────────────────── */
+      .desk-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .desk-item {
+        border: 1px solid rgba(201, 168, 76, 0.15);
+        padding: 14px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .desk-item:hover {
+        border-color: rgba(201, 168, 76, 0.5);
+        background: rgba(201, 168, 76, 0.04);
+      }
+      .desk-item__label {
+        font-size: 15px;
+        color: rgba(232, 228, 216, 0.85);
+      }
+      .desk-item__arrow {
+        color: rgba(201, 168, 76, 0.4);
+        font-size: 14px;
+      }
+
+      /* ── Desk: capability view ───────────────────────────────── */
+      .desk-view {
+        max-width: 720px;
+      }
+      .desk-title {
+        font-size: 22px;
+        color: #c9a84c;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+      .desk-sentence {
+        font-size: 16px;
+        color: rgba(232, 228, 216, 0.8);
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+      .desk-paragraph {
+        font-size: 14px;
+        color: rgba(232, 228, 216, 0.6);
+        line-height: 1.8;
+      }
+
+      /* ── Timeline view ───────────────────────────────────────── */
+      .timeline-view {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .timeline-heading {
+        font-size: 18px;
+        color: #c9a84c;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      }
+      .timeline-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .timeline-step {
+        display: flex;
+        gap: 20px;
+        padding: 20px 0;
+        border-left: 1px solid rgba(201, 168, 76, 0.2);
+        padding-left: 24px;
+        position: relative;
+      }
+      .timeline-step::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 24px;
+        width: 9px;
+        height: 9px;
+        background: rgba(201, 168, 76, 0.6);
+        border-radius: 50%;
+      }
+      .timeline-step__num {
+        font-size: 11px;
+        color: rgba(201, 168, 76, 0.4);
+        letter-spacing: 0.1em;
+        min-width: 28px;
+        padding-top: 2px;
+      }
+      .timeline-step__body {
+        flex: 1;
+      }
+      .timeline-step__label {
+        font-size: 15px;
+        color: rgba(232, 228, 216, 0.85);
+        margin-bottom: 6px;
+      }
+      .timeline-step__sentence {
+        font-size: 13px;
+        color: rgba(232, 228, 216, 0.5);
+        line-height: 1.6;
+      }
+
+      /* ── Brain overlay ───────────────────────────────────────── */
+      #brainOverlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 15, 0.96);
+        z-index: 200;
+        overflow-y: auto;
+      }
+      #brainOverlay.active {
+        display: flex;
+        flex-direction: column;
+      }
+      .brain-header {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+        gap: 12px;
+      }
+      .brain-close {
+        background: none;
+        border: 1px solid rgba(201, 168, 76, 0.3);
+        color: #c9a84c;
+        padding: 4px 12px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .brain-title {
+        font-size: 14px;
+        color: rgba(232, 228, 216, 0.6);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .brain-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+      }
+      /* quadrant container — size set by JS */
+      #brainQuadrantArea {
+        position: relative;
+      }
+      #brainBotPortrait {
+        text-align: center;
+      }
+      #brainQuadrants {
+        position: relative;
+      }
+      .brain-q {
+        position: absolute;
+        cursor: pointer;
+        border: 1px solid rgba(201, 168, 76, 0.3);
+        background: rgba(10, 10, 15, 0.85);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        transition: border-color 0.2s;
+      }
+      .brain-q:hover {
+        border-color: rgba(201, 168, 76, 0.7);
+      }
+      .brain-q__label {
+        font-size: 11px;
+        color: rgba(232, 228, 216, 0.7);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      /* ── Disclosure inline (desk + office) ───────────────────── */
+      .disclose-wrap {
+        margin-top: 16px;
+      }
+
+      /* ── Placeholder text style ──────────────────────────────── */
+      .placeholder-text {
+        color: rgba(201, 168, 76, 0.35);
+        font-style: italic;
+        font-size: 0.9em;
+      }
+
+      /* ── Asset placeholder — unbound slot (no key in nodes.json) */
+      .asset-placeholder {
+        background: var(--placeholder-bg, #1a1a1a);
+        border: 1px solid var(--placeholder-border, rgba(201, 168, 76, 0.2));
+        color: var(--placeholder-text, rgba(201, 168, 76, 0.3));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono, monospace);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-align: center;
+        padding: 4px;
+        box-sizing: border-box;
+      }
+
+      /* ── Asset load-failed — key bound but HTTP fetch errored */
+      /* Distinct from .asset-placeholder so a masked failure is visible */
+      .asset-load-failed {
+        background: var(--placeholder-failed-bg, rgba(197, 69, 69, 0.08));
+        border: 1px solid
+          var(--placeholder-failed-border, rgba(197, 69, 69, 0.4));
+        color: var(--placeholder-failed-text, rgba(197, 69, 69, 0.6));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono, monospace);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-align: center;
+        padding: 4px;
+        box-sizing: border-box;
+      }
+
+      /* Node illustration slots (desk, brain, timeline) */
+      .node-illustration {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        margin-bottom: 8px;
+      }
+      .node-illustration img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Header ────────────────────────────────────────────────── -->
+    <header id="deck-header">
+      <button id="back-btn">← Back</button>
+      <div id="breadcrumb"></div>
+    </header>
+
+    <!-- ── FLOOR depth ────────────────────────────────────────────── -->
+    <section id="depth-floor" class="depth-layer active">
+      <div class="depth-content">
+        <div id="floor-agent-grid" class="agent-grid"></div>
+        <div style="height: 24px"></div>
+        <div id="floor-timeline-entry" class="agent-grid">
+          <div class="timeline-entry" id="timeline-entry-btn">
+            <span style="color: #c9a84c; font-size: 18px">▸</span>
+            <span class="timeline-entry__label"
+              >Worked Example — See the agents in action</span
+            >
+            <span style="color: rgba(201, 168, 76, 0.4); font-size: 14px"
+              >→</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── OFFICE depth ───────────────────────────────────────────── -->
+    <section id="depth-office" class="depth-layer">
+      <div class="depth-content">
+        <div id="office-content"></div>
+      </div>
+    </section>
+
+    <!-- ── DESK depth ─────────────────────────────────────────────── -->
+    <section id="depth-desk" class="depth-layer">
+      <div class="depth-content">
+        <div id="desk-content" class="desk-view"></div>
+      </div>
+    </section>
+
+    <!-- ── TIMELINE depth ────────────────────────────────────────────── -->
+    <section id="depth-timeline" class="depth-layer">
+      <div class="depth-content">
+        <div class="timeline-view">
+          <div class="timeline-heading">Worked Example</div>
+          <div id="timeline-steps-list" class="timeline-steps"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BRAIN overlay ──────────────────────────────────────────── -->
+    <div id="brainOverlay">
+      <div class="brain-header">
+        <button class="brain-close" onclick="closeBrain()">← Back</button>
+        <div class="brain-title" id="brain-agent-label"></div>
+      </div>
+      <div class="brain-body">
+        <div id="brainQuadrantArea">
+          <div id="brainBotPortrait"></div>
+          <div id="brainQuadrants"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Module scripts ─────────────────────────────────────────── -->
+    <script src="modules/transitions.js"></script>
+    <script src="modules/depth-nav.js"></script>
+    <script src="modules/assets.js"></script>
+    <script src="modules/brain.js"></script>
+    <script src="modules/disclose.js"></script>
+    <script src="modules/timeline.js"></script>
+
+    <!-- ── GSAP (CDN, optional — graceful fallback if absent) ─────── -->
+    <script>
+      (function () {
+        var s = document.createElement("script");
+        s.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js";
+        s.onload = function () {
+          if (typeof gsap !== "undefined") window._gsapReady = true;
+        };
+        document.head.appendChild(s);
+      })();
+    </script>
+
+    <!-- ── Page initialiser ───────────────────────────────────────── -->
+    <script>
+      /* ── State ────────────────────────────────────────────────────── */
+      var _nodes = []; // full node list
+      var _nodeById = {}; // id → node
+      var _currentAgent = null; // active agent key during office/desk/brain
+      var _currentDesk = null; // active desk node id
+
+      /* ── Content loader ───────────────────────────────────────────── */
+      function _loadContent() {
+        return fetch("content/nodes.json")
+          .then(function (r) {
+            if (!r.ok) throw new Error("nodes.json fetch failed: " + r.status);
+            return r.json();
+          })
+          .then(function (nodes) {
+            _nodes = nodes;
+            nodes.forEach(function (n) {
+              _nodeById[n.id] = n;
+            });
+          });
+      }
+
+      /* ── Helpers ──────────────────────────────────────────────────── */
+      function _byDepth(depth) {
+        return _nodes.filter(function (n) {
+          return n.depth === depth;
+        });
+      }
+
+      function _childrenOf(nodeId) {
+        var node = _nodeById[nodeId];
+        if (!node || !node.children) return [];
+        return node.children
+          .map(function (id) {
+            return _nodeById[id];
+          })
+          .filter(Boolean);
+      }
+
+      function _agentOfficeNode() {
+        return _nodeById["office_" + _currentAgent];
+      }
+
+      /* Render a label, wrapping placeholders visually */
+      function _label(node) {
+        if (!node) return "";
+        var lbl = node.label || "";
+        if (lbl.match(/^\[P\d+\]$/)) {
+          return '<span class="placeholder-text">' + lbl + "</span>";
+        }
+        return lbl;
+      }
+
+      function _copy(node, level) {
+        if (!node || !node.disclosure) return "";
+        var val = node.disclosure[level] || "";
+        if (val.match(/^\[COPY-\d+\]$/) || !val) {
+          return (
+            '<span class="placeholder-text">' +
+            (val || "[copy pending]") +
+            "</span>"
+          );
+        }
+        return val;
+      }
+
+      /* ── Asset slot helper ────────────────────────────────────────── */
+      /* Renders one image slot for a node.
+       * - No binding (assets[slot] absent or has no key) → .asset-placeholder
+       * - Has binding + loaded → <img>
+       * - Has binding + failed → .asset-load-failed (distinct class, not unbound)
+       */
+      function _assetSlot(node, slot, w, h) {
+        var binding = node && node.assets && node.assets[slot];
+        var key = binding && binding.key;
+        var style = "width:" + w + "px;height:" + h + "px;";
+        if (!key) {
+          return (
+            '<div class="asset-placeholder node-illustration" data-slot="' +
+            slot +
+            '" style="' +
+            style +
+            '">' +
+            slot +
+            "</div>"
+          );
+        }
+        var url = typeof assetUrl === "function" ? assetUrl(key) : key;
+        return (
+          '<img class="node-illustration" src="' +
+          url +
+          '" alt="' +
+          slot +
+          '" style="' +
+          style +
+          '" data-bound-key="' +
+          key +
+          '" onerror="_onBoundAssetError(this)">'
+        );
+      }
+
+      /* Called when a portrait img with a binding fails to load.
+       * Replaces with .asset-load-failed (not .asset-placeholder) so the
+       * failure is distinct from "no binding" and cannot be silently masked. */
+      function _onPortraitError(img) {
+        var key = img.src || "unknown";
+        var parent = img.parentNode;
+        if (!parent) return;
+        var div = document.createElement("div");
+        div.className = "office-portrait asset-load-failed";
+        div.style.width = "120px";
+        div.style.height = "120px";
+        div.title = "load failed: " + key;
+        div.textContent = "load failed";
+        parent.replaceChild(div, img);
+      }
+
+      /* Called when a bound node illustration fails to load. */
+      function _onBoundAssetError(img) {
+        var key = img.getAttribute("data-bound-key") || img.src || "unknown";
+        var parent = img.parentNode;
+        if (!parent) return;
+        var div = document.createElement("div");
+        div.className = "node-illustration asset-load-failed";
+        div.style.cssText = img.style.cssText;
+        div.title = "load failed: " + key;
+        div.textContent = "load failed";
+        parent.replaceChild(div, img);
+      }
+
+      /* ── Floor renderer ───────────────────────────────────────────── */
+      function _renderFloor() {
+        var grid = document.getElementById("floor-agent-grid");
+        if (!grid) return;
+
+        // Ordered list: aribot, anabot, edbot, artbot
+        var agentKeys = ["aribot", "anabot", "edbot", "artbot"];
+        var html = "";
+
+        agentKeys.forEach(function (key) {
+          var node = _nodeById["office_" + key];
+          if (!node) return;
+          var roleSentence =
+            (node.disclosure && node.disclosure.sentence) || "";
+          var roleHint = roleSentence.match(/^\[COPY/)
+            ? '<span class="placeholder-text">' + roleSentence + "</span>"
+            : roleSentence;
+
+          html +=
+            '<div class="agent-card" data-agent="' +
+            key +
+            '" onclick="_drillToAgent(\'' +
+            key +
+            "')\">" +
+            '<div class="agent-card__label">' +
+            _label(node) +
+            "</div>" +
+            '<div class="agent-card__role">' +
+            roleHint +
+            "</div>" +
+            '<div class="agent-card__arrow">→</div>' +
+            "</div>";
+        });
+
+        grid.innerHTML = html;
+      }
+
+      /* ── Office renderer ──────────────────────────────────────────── */
+      function _renderOffice(agentKey) {
+        var container = document.getElementById("office-content");
+        if (!container) return;
+
+        var officeNode = _nodeById["office_" + agentKey];
+        if (!officeNode) {
+          container.innerHTML = "<p>Agent not found.</p>";
+          return;
+        }
+
+        var stillKey =
+          officeNode.assets &&
+          officeNode.assets.still &&
+          officeNode.assets.still.key;
+        var portraitHtml = stillKey
+          ? '<img class="office-portrait" src="' +
+            (typeof assetUrl === "function" ? assetUrl(stillKey) : stillKey) +
+            '" alt=""' +
+            ' onerror="_onPortraitError(this)">'
+          : '<div class="office-portrait-placeholder asset-placeholder"' +
+            ' style="width:120px;height:120px;">portrait</div>';
+
+        var deskChildren = _childrenOf("office_" + agentKey).filter(
+          function (n) {
+            return n.depth === "desk";
+          },
+        );
+
+        var deskHtml = deskChildren
+          .map(function (n) {
+            return (
+              '<div class="desk-item" onclick="_drillToDesk(\'' +
+              n.id +
+              "')\">" +
+              '<span class="desk-item__label">' +
+              _label(n) +
+              "</span>" +
+              '<span class="desk-item__arrow">→</span>' +
+              "</div>"
+            );
+          })
+          .join("");
+
+        container.innerHTML =
+          '<div class="office-header">' +
+          portraitHtml +
+          '<div class="office-meta">' +
+          '<div class="office-name">' +
+          _label(officeNode) +
+          "</div>" +
+          '<div class="office-sentence">' +
+          _copy(officeNode, "sentence") +
+          "</div>" +
+          '<div class="office-actions">' +
+          '<button class="btn-ghost" onclick="_openBrainFor(\'' +
+          agentKey +
+          "')\">Brain →</button>" +
+          "</div>" +
+          "</div>" +
+          "</div>" +
+          '<div class="desk-list">' +
+          deskHtml +
+          "</div>";
+      }
+
+      /* ── Desk renderer ────────────────────────────────────────────── */
+      function _renderDesk(nodeId) {
+        var container = document.getElementById("desk-content");
+        if (!container) return;
+
+        var node = _nodeById[nodeId];
+        if (!node) {
+          container.innerHTML = "<p>Not found.</p>";
+          return;
+        }
+
+        container.innerHTML =
+          _assetSlot(node, "illustration", 80, 80) +
+          '<div class="desk-title">' +
+          _label(node) +
+          "</div>" +
+          '<div class="desk-sentence">' +
+          _copy(node, "sentence") +
+          "</div>" +
+          '<div class="desk-paragraph">' +
+          _copy(node, "paragraph") +
+          "</div>";
+      }
+
+      /* ── Timeline renderer ────────────────────────────────────────── */
+      function _renderTimeline() {
+        var list = document.getElementById("timeline-steps-list");
+        if (!list) return;
+
+        var steps = _nodes.filter(function (n) {
+          return n.depth === "timeline";
+        });
+
+        list.innerHTML = steps
+          .map(function (n, i) {
+            return (
+              '<div class="timeline-step">' +
+              '<div class="timeline-step__num">0' +
+              (i + 1) +
+              "</div>" +
+              _assetSlot(n, "illustration", 64, 64) +
+              '<div class="timeline-step__body">' +
+              '<div class="timeline-step__label">' +
+              _label(n) +
+              "</div>" +
+              '<div class="timeline-step__sentence">' +
+              _copy(n, "sentence") +
+              "</div>" +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      /* ── Brain quadrant ring — generated from spec ────────────────── */
+      function _openBrainFor(agentKey) {
+        _currentAgent = agentKey;
+        var officeNode = _nodeById["office_" + agentKey];
+
+        // Set header label
+        var titleEl = document.getElementById("brain-agent-label");
+        if (titleEl) {
+          titleEl.textContent =
+            (officeNode ? officeNode.label : agentKey) + " — Brain";
+        }
+
+        // Collect brain substrate nodes for this agent
+        var brainNodes = _nodes.filter(function (n) {
+          return n.depth === "brain" && n.agent === agentKey;
+        });
+
+        var CONTAINER = 530;
+        var QUAD_SIZE = 180;
+        var cx = CONTAINER / 2;
+        var cy = CONTAINER / 2;
+        var radius = (CONTAINER / 2 - QUAD_SIZE / 2) * 0.82;
+        var count = brainNodes.length;
+        var startAngle = -Math.PI / 2; // top
+
+        // Compute positions from spec — trigonometric ring generation
+        var positions = brainNodes.map(function (node, i) {
+          var angle = startAngle + (2 * Math.PI * i) / count;
+          return {
+            node: node,
+            angle: angle,
+            qx: cx + radius * Math.cos(angle) - QUAD_SIZE / 2,
+            qy: cy + radius * Math.sin(angle) - QUAD_SIZE / 2,
+            lineCx: cx + radius * Math.cos(angle),
+            lineCy: cy + radius * Math.sin(angle),
+          };
+        });
+
+        // SVG connection lines — generated from positions, not hardcoded
+        var svgLines = positions
+          .map(function (p) {
+            return (
+              '<line x1="' +
+              cx +
+              '" y1="' +
+              cy +
+              '" x2="' +
+              p.lineCx +
+              '" y2="' +
+              p.lineCy +
+              '"' +
+              ' stroke="rgba(201,168,76,0.25)" stroke-width="1" stroke-dasharray="6 4"/>'
+            );
+          })
+          .join("");
+
+        var svgMarkup =
+          '<svg viewBox="0 0 ' +
+          CONTAINER +
+          " " +
+          CONTAINER +
+          '"' +
+          ' style="position:absolute;top:0;left:0;width:' +
+          CONTAINER +
+          "px;height:" +
+          CONTAINER +
+          'px;pointer-events:none">' +
+          svgLines +
+          "</svg>";
+
+        // Quadrant divs — generated from spec
+        var quadsMarkup = positions
+          .map(function (p) {
+            var lbl = p.node.label || "";
+            var displayLbl = lbl.match(/^\[P\d+\]$/)
+              ? '<span class="placeholder-text">' + lbl + "</span>"
+              : lbl;
+            return (
+              '<div class="brain-q" id="bq_' +
+              p.node.id +
+              '"' +
+              ' style="left:' +
+              p.qx +
+              "px;top:" +
+              p.qy +
+              "px;width:" +
+              QUAD_SIZE +
+              "px;height:" +
+              QUAD_SIZE +
+              'px;"' +
+              " onclick=\"_clickBrainQuad('" +
+              p.node.id +
+              "')\">" +
+              _assetSlot(p.node, "substrate", 60, 60) +
+              '<div class="brain-q__label">' +
+              displayLbl +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+
+        var quadArea = document.getElementById("brainQuadrantArea");
+        var quadrantsEl = document.getElementById("brainQuadrants");
+        if (quadArea) {
+          quadArea.style.width = CONTAINER + "px";
+          quadArea.style.height = CONTAINER + "px";
+          quadArea.style.position = "relative";
+        }
+        if (quadrantsEl) {
+          quadrantsEl.style.width = CONTAINER + "px";
+          quadrantsEl.style.height = CONTAINER + "px";
+          quadrantsEl.style.position = "relative";
+          quadrantsEl.innerHTML = svgMarkup + quadsMarkup;
+        }
+
+        // Init brain module with assets from spec
+        if (typeof initBrain === "function") {
+          initBrain({
+            overlayId: "brainOverlay",
+            portraitContainerId: "brainBotPortrait",
+            quadrantsId: "brainQuadrants",
+            quadrants: positions.map(function (p) {
+              return {
+                key: p.node.id,
+                cssClass: "brain-q",
+                imgId: "bq_img_" + p.node.id,
+                labelId: "bq_label_" + p.node.id,
+              };
+            }),
+            getPortraitUrl: function (key) {
+              var node =
+                _nodeById["office_" + key] ||
+                _nodeById["office_" + _currentAgent];
+              var assets = (node && node.assets) || {};
+              var resolve = function (slot) {
+                var binding = assets[slot];
+                if (!binding || !binding.key) return "";
+                return typeof assetUrl === "function"
+                  ? assetUrl(binding.key)
+                  : binding.key;
+              };
+              return {
+                idle: resolve("idle"),
+                still: resolve("still"),
+                disassemble: resolve("disassemble"),
+              };
+            },
+            getQuadrantAsset: function (agentKey, quadNodeId) {
+              return { idle: "", reaction: "" };
+            },
+            onQuadrantClick: function (agentKey, quadNodeId) {
+              _clickBrainQuad(quadNodeId);
+            },
+            onClose: function () {
+              closeBrain();
+            },
+            gsap: typeof gsap !== "undefined" ? gsap : null,
+          });
+          if (typeof openBrain === "function") openBrain(agentKey);
+        } else {
+          // Fallback: just show the overlay
+          var overlay = document.getElementById("brainOverlay");
+          var portrait = document.getElementById("brainBotPortrait");
+          if (portrait) portrait.innerHTML = "";
+          if (overlay) overlay.classList.add("active");
+        }
+      }
+
+      function _clickBrainQuad(nodeId) {
+        var node = _nodeById[nodeId];
+        if (!node) return;
+        var lbl = node.label || nodeId;
+        var sentence = (node.disclosure && node.disclosure.sentence) || "";
+        // Simple inline disclosure — disclose.js could render a panel here
+        alert("Brain substrate: " + lbl + "\n\n" + sentence);
+      }
+
+      /* ── Depth navigation ─────────────────────────────────────────── */
+      function _setDepth(depthId) {
+        document.querySelectorAll(".depth-layer").forEach(function (el) {
+          el.classList.remove("active");
+        });
+        var target = document.getElementById(depthId);
+        if (target) target.classList.add("active");
+      }
+
+      function _updateBreadcrumb(label) {
+        var bc = document.getElementById("breadcrumb");
+        if (bc) bc.textContent = label;
+      }
+
+      function _setBackVisible(visible) {
+        var btn = document.getElementById("back-btn");
+        if (btn) btn.style.display = visible ? "" : "none";
+      }
+
+      function _drillToAgent(agentKey) {
+        _currentAgent = agentKey;
+        _renderOffice(agentKey);
+        _setDepth("depth-office");
+        var officeNode = _nodeById["office_" + agentKey];
+        _updateBreadcrumb(
+          (officeNode ? officeNode.label : agentKey) + " — Office",
+        );
+        _setBackVisible(true);
+      }
+
+      function _drillToDesk(nodeId) {
+        _currentDesk = nodeId;
+        _renderDesk(nodeId);
+        _setDepth("depth-desk");
+        var node = _nodeById[nodeId];
+        _updateBreadcrumb((node ? node.label : nodeId) + " — Desk");
+        _setBackVisible(true);
+      }
+
+      function _drillToTimeline() {
+        _renderTimeline();
+        _setDepth("depth-timeline");
+        _updateBreadcrumb("Worked Example — Timeline");
+        _setBackVisible(true);
+      }
+
+      function _drillUp() {
+        if (_currentDesk) {
+          _currentDesk = null;
+          _drillToAgent(_currentAgent);
+          return;
+        }
+        if (_currentAgent) {
+          _currentAgent = null;
+          _setDepth("depth-floor");
+          _updateBreadcrumb("");
+          _setBackVisible(false);
+          return;
+        }
+        // Already at floor
+      }
+
+      /* closeBrain is referenced in markup — must be global */
+      function closeBrain() {
+        var overlay = document.getElementById("brainOverlay");
+        if (overlay) overlay.classList.remove("active");
+        if (
+          typeof closeBrain !== "undefined" &&
+          typeof _cfg !== "undefined" &&
+          _cfg.onClose
+        )
+          return;
+      }
+
+      /* ── Back button ─────────────────────────────────────────────── */
+      document.addEventListener("DOMContentLoaded", function () {
+        var backBtn = document.getElementById("back-btn");
+        if (backBtn) {
+          backBtn.addEventListener("click", function () {
+            var overlay = document.getElementById("brainOverlay");
+            if (overlay && overlay.classList.contains("active")) {
+              overlay.classList.remove("active");
+              return;
+            }
+            var timelineDepth = document.getElementById("depth-timeline");
+            if (timelineDepth && timelineDepth.classList.contains("active")) {
+              _setDepth("depth-floor");
+              _updateBreadcrumb("");
+              _setBackVisible(false);
+              return;
+            }
+            _drillUp();
+          });
+        }
+
+        var timelineEntryBtn = document.getElementById("timeline-entry-btn");
+        if (timelineEntryBtn) {
+          timelineEntryBtn.addEventListener("click", _drillToTimeline);
+        }
+
+        // Initialize asset module
+        if (typeof initAssets === "function") {
+          initAssets("", "config/deck_assets.jsonl");
+        }
+
+        // Load content spec and render
+        _loadContent()
+          .then(function () {
+            _renderFloor();
+          })
+          .catch(function (err) {
+            console.error("Content load failed:", err);
+            var grid = document.getElementById("floor-agent-grid");
+            if (grid)
+              grid.innerHTML =
+                '<p style="color:rgba(232,228,216,0.4);padding:24px">Content spec not loaded. Run from a web server.</p>';
+          });
+      });
+
+      // Keyboard: Escape to go back
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          var overlay = document.getElementById("brainOverlay");
+          if (overlay && overlay.classList.contains("active")) {
+            overlay.classList.remove("active");
+            return;
+          }
+          _drillUp();
+        }
+      });
+    </script>
+  </body>
+</html>

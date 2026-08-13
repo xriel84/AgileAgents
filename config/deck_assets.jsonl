@@ -32,3 +32,4 @@
 {"key":"al_proscenium_M-C_still_00001.png","role":"set-stage","tags":["stage","proscenium"],"workflow_hash":null,"prompt_hash":null,"degrade_to":null}
 {"key":"al_tube_W-C_still_00001.png","role":"prop-still","tags":["prop","tube"],"workflow_hash":null,"prompt_hash":null,"degrade_to":null}
 {"key":"al_tube_W-C_open_00001.webp","role":"prop-action","tags":["prop","tube"],"workflow_hash":null,"prompt_hash":null,"degrade_to":"al_tube_W-C_still_00001.png"}
+{"key":"al_edbot_M-C_still_00001.png","role":"character-still","tags":["edbot","medium"],"workflow_hash":null,"prompt_hash":null,"degrade_to":null}

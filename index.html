@@ -1,10 +1,10 @@
 <!doctype html>
-<!-- raptor-deck-build:2026-08-13 -->
+<!-- raptor-deck-build:2026-08-14 -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>[P001]</title>
+    <title>Raptor Academy</title>
     <link rel="stylesheet" href="modules/tokens.css" />
     <link rel="stylesheet" href="modules/iso.css" />
     <style>
@@ -363,9 +363,15 @@
       .brain-body {
         flex: 1;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
         padding: 32px;
+        gap: 40px;
+      }
+      #brainDetail {
+        display: none;
+        max-width: 360px;
+        padding-top: 40px;
       }
       /* quadrant container — size set by JS */
       #brainQuadrantArea {
@@ -521,6 +527,7 @@
           <div id="brainBotPortrait"></div>
           <div id="brainQuadrants"></div>
         </div>
+        <div id="brainDetail"></div>
       </div>
     </div>
 
@@ -1006,10 +1013,19 @@
       function _clickBrainQuad(nodeId) {
         var node = _nodeById[nodeId];
         if (!node) return;
-        var lbl = node.label || nodeId;
-        var sentence = (node.disclosure && node.disclosure.sentence) || "";
-        // Simple inline disclosure — disclose.js could render a panel here
-        alert("Brain substrate: " + lbl + "\n\n" + sentence);
+        var detail = document.getElementById("brainDetail");
+        if (!detail) return;
+        detail.style.display = "";
+        detail.innerHTML =
+          '<div class="desk-title">' +
+          (node.label || nodeId) +
+          "</div>" +
+          '<div class="desk-sentence" style="margin-top:12px">' +
+          _copy(node, "sentence") +
+          "</div>" +
+          '<div class="desk-paragraph" style="margin-top:12px">' +
+          _copy(node, "paragraph") +
+          "</div>";
       }
 
       /* ── Depth navigation ─────────────────────────────────────────── */

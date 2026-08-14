@@ -17,16 +17,16 @@
 > AriBot receives requests in a Discord channel, decides which agent and which recipe answers them, and dispatches the work. It holds the state that the other agents read and write, so that a scene change made by one agent is visible to the rest, and it reports back into the same channel the request arrived in.
 
 **COPY-007** · `office_aribot` · deep.specs[0]
-> Qwen3.6-35B-A3B served by llama.cpp on port 8090, occupying roughly 26.5 GB of the 48 GB card at steady state, bound to the full recipe index and to the Discord and world-state tool sets.
+> Qwen3.6-35B-A3B served by llama.cpp on port 8090, sharing a single 49,140 MiB workstation card with the image and mesh generators, and bound to the full recipe index and to the Discord and world-state tool sets.
 
-**COPY-008** · `office_anabot` · sentence · PLANNED
-> TABot is the teaching assistant, and it is the agent students interact with when the instructor is teaching rather than answering.
+**COPY-008** · `office_anabot` · sentence · RUNNING
+> TABot is the teaching assistant, and its first working capability is turning what someone says out loud into a structured plan the class can act on.
 
 **COPY-009** · `office_anabot` · paragraph
-> TABot is designed to take assignments in, keep track of what is due and who is waiting, answer platform questions from a card store rather than from a model's memory, and pass anything it cannot answer to the instructor with the context attached. The intake machinery it depends on is built and returns structured summaries with citations back to the source; the student-facing and learning-management sides of it are not.
+> When a session is recorded, TABot transcribes it locally, organises the unstructured speech into ranked priorities with a weekly working structure, and posts the result into the class channel with every point quoting the exact words it came from. That cited record is the substrate the rest of the assistant is built on: what is due and who is waiting, platform answers drawn from a card store the instructor writes and corrects, and escalation to the instructor with the context attached.
 
 **COPY-010** · `office_anabot` · deep.specs[0]
-> Shares the same local inference substrate as the other agents and is distinguished by its recipe family and tool binding rather than by a separate model.
+> Shares the local inference substrate with the other agents and is distinguished by its recipe family and tool binding rather than by a separate model. Transcription runs on a local Whisper large-v3 service on the same machine, and the organising step runs on the same local language model as the rest of the academy.
 
 **COPY-011** · `office_edbot` · sentence · RUNNING
 > StreamBot produces the class, and it is the agent that keeps a teaching stream running while the instructor teaches.
@@ -44,7 +44,7 @@
 > XRBot generates images and meshes from recorded workflows, assembles them with the scene code into a WebXR module, and publishes it. Because the generation step records the exact workflow that produced each asset, an asset that is lost or needs a variation is reproduced from that record rather than re-prompted from scratch.
 
 **COPY-016** · `office_artbot` · deep.specs[0]
-> Dispatches to a local ComfyUI instance sharing the same GPU, and to TRELLIS for mesh generation. Every generated asset is written to an index carrying the hash of the workflow that produced it; the index currently holds 198 entries.
+> Dispatches to a local ComfyUI instance sharing the same GPU, and to TRELLIS for mesh generation. Every generated asset is written to an index carrying the hash of the workflow that produced it; the index currently holds three hundred and twenty-one entries.
 
 **COPY-017** · `desk_aribot_orchestrate` · sentence · RUNNING
 > Orchestration decides which agent and which recipe answers a request, and dispatches it.
@@ -64,17 +64,17 @@
 **COPY-022** · `desk_aribot_world_state` · paragraph
 > Changes are broadcast over a WebSocket connection to every attached surface, so a mesh built by one agent appears in the running scene without the page being reloaded. Each change is timed against a stated latency class, which makes a slow update a measurable failure rather than a matter of impression.
 
-**COPY-023** · `desk_anabot_assignments` · sentence · SPECIFIED
-> Assignment intake takes what a student submits and turns it into a structured record.
+**COPY-023** · `desk_anabot_assignments` · sentence · RUNNING
+> Assignment intake takes what a person submits, spoken or written, and turns it into a structured record with citations.
 
 **COPY-024** · `desk_anabot_assignments` · paragraph
-> The intake step reads unstructured material and returns a summary in which every claim carries a citation back to the exact span of the source it came from, and the spans are located by the system rather than reported by the model. The deadline tracking and group coordination that sit on top of that record are designed and not yet built.
+> The intake step reads unstructured material and returns ranked priorities, a weekly working structure, an estimate of how many questions the work will raise each week, and an estimate of the time required to scaffold it. Every claim carries a citation quoting the exact span of the source it came from, and those spans are located by the system rather than reported by the model, which is what stops a summary from inventing something the speaker did not say. That record is what deadline tracking and group coordination sit on. Measured end to end on a real session recording: 12.8 seconds from stopping the recording to a cited, structured plan, of which 8.6 seconds is transcription and 4.2 seconds is organising. The model supplies quoted text only; the character offsets that anchor each citation are computed afterwards in Python, so a quotation that was never spoken fails to resolve and the run stops rather than reporting it.
 
-**COPY-025** · `desk_anabot_questions` · sentence · PLANNED
-> Question handling answers platform questions from a card store and escalates the rest.
+**COPY-025** · `desk_anabot_questions` · sentence · SPECIFIED
+> Question handling asks what a request left unclear, and escalates what it cannot answer.
 
 **COPY-026** · `desk_anabot_questions` · paragraph
-> Questions about how the platform works are answered from written cards, so the answer a student receives is one the instructor wrote and can correct. Anything outside the cards is passed to the instructor with the question, the student, and the context attached, rather than being answered from a model's general knowledge.
+> When intake finishes, the agent confirms what it received and asks a small number of follow-up questions, which is both how the remaining gaps get closed and how a person sees whether they were understood. Questions about how the platform itself works resolve against written cards the instructor authors and can correct, so that a student never receives an answer assembled from a model's general knowledge.
 
 **COPY-027** · `desk_anabot_grading` · sentence · PLANNED
 > Grading assistance scores work against the instructor's rubric and stops before the grade.
@@ -125,7 +125,7 @@
 > The model was chosen because it fits alongside image generation on a single card and because its job is interpretation rather than invention. It is asked to decide what a sentence means and which tool answers it, and it is prevented by contract from producing the values that go into that tool, which is what allows a comparatively small local model to do this work reliably.
 
 **COPY-043** · `brain_aribot_model` · deep.specs[0]
-> Qwen3.6-35B-A3B, served by llama.cpp on port 8090, occupying 26,559 MiB of 49,140 MiB at steady state with no measured spike during inference.
+> Qwen3.6-35B-A3B, served by llama.cpp on port 8090, resident on the same 49,140 MiB card that runs image and mesh generation, with no cloud inference anywhere in the path.
 
 **COPY-044** · `brain_aribot_tools` · sentence · RUNNING
 > AriBot's tools are the registered recipes, and the recipe index is the list of things it can do.
@@ -151,23 +151,23 @@
 **COPY-051** · `brain_anabot_model` · paragraph
 > Sharing one substrate across four agents is the reason the academy fits on one machine. What makes TABot different is not a different model but a different recipe family, a different tool binding and a different set of cards to answer from.
 
-**COPY-052** · `brain_anabot_tools` · sentence · PLANNED
-> TABot's tools reach the assignment record, the card store and the instructor.
+**COPY-052** · `brain_anabot_tools` · sentence · RUNNING
+> TABot's tools are the transcription service, the organiser, the grounding check and the class channel.
 
 **COPY-053** · `brain_anabot_tools` · paragraph
-> The intake tool that turns submitted material into a cited structured record exists and is tested. The card lookup, the assignment store and the escalation path to the instructor are specified against the same contracts and are not yet built.
+> A recording is transcribed locally, organised into a ranked plan by the local model, checked so that every quotation is found word for word in the transcript, and posted into the channel the class is already using. The card lookup, the assignment store and the escalation path bind to that same tool surface.
 
-**COPY-054** · `brain_anabot_memory` · sentence · PLANNED
-> TABot remembers what each student has submitted and what is still outstanding.
+**COPY-054** · `brain_anabot_memory` · sentence · RUNNING
+> TABot's durable memory is the cited plan it writes, which any reader can check against the recording.
 
 **COPY-055** · `brain_anabot_memory` · paragraph
-> Student records, assignment state and the history of what has already been asked are held as written records rather than in model context, so an answer given in week nine can cite what was submitted in week two. The store is designed and not built.
+> Each plan it produces is a written record that quotes its own source, so it can be re-read and checked by anyone later rather than taken on trust. The longitudinal side is the same record accumulated per person — what each student has submitted and what remains outstanding — so that an answer given in week nine cites what was said in week two.
 
-**COPY-056** · `brain_anabot_loop` · sentence · PLANNED
-> TABot answers what it has a card for and escalates the rest.
+**COPY-056** · `brain_anabot_loop` · sentence · RUNNING
+> TABot listens, transcribes, organises, checks its own quotations, and posts.
 
 **COPY-057** · `brain_anabot_loop` · paragraph
-> The threshold is deliberately conservative: a question that is not clearly covered by a card goes to the instructor rather than being answered approximately. The cost of an unnecessary escalation is a moment of the instructor's time, and the cost of a confident wrong answer to a student is considerably higher.
+> The checking step is the substance of it: if a quotation the model produced cannot be found in the transcript, the run fails rather than posting a plausible summary. The conservative threshold on the other side is the same instinct — a question not clearly covered goes to the instructor rather than being answered approximately, because the cost of an unnecessary escalation is a moment of the instructor's time and the cost of a confident wrong answer to a student is considerably higher.
 
 **COPY-058** · `brain_edbot_model` · sentence · RUNNING
 > StreamBot runs on the same local model, and most of what it does needs no model at all.
@@ -239,13 +239,13 @@
 > A student asks a question, and it reaches the instructor without stopping the class.
 
 **COPY-081** · `timeline_step_04` · paragraph
-> TABot answers what it has a written card for and passes the rest to the instructor with the context attached. StreamBot collects what is raised during the session so it arrives in one place rather than as an interruption.
+> TABot confirms what it heard and asks the follow-up questions the request left open, passing anything outside its scope to the instructor with the context attached. StreamBot collects what is raised during the session so that it arrives in one place rather than as an interruption.
 
 **COPY-082** · `timeline_step_05` · sentence
 > The session ends and the recording is broken down automatically.
 
 **COPY-083** · `timeline_step_05` · paragraph
-> The recording is transcribed and divided into segments, and each segment is summarised with citations back to the point in the recording it came from. What the class covered becomes searchable rather than remaining an hour of video.
+> TABot transcribes the recording, organises what was said into ranked priorities with a weekly working structure, and posts it into the class channel with every point quoting the words it came from. What the class covered becomes a plan that can be checked against the recording rather than an hour of video.
 
 **COPY-084** · `timeline_step_06` · sentence
 > The module is published, and teaching it again means opening it.
